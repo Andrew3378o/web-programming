@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Розумний будинок</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Панель моніторингу розумного будинку</h1>
+    <p>Останнє оновлення: <span id="lastUpdate">--:--:--</span></p>
+  </header>
+
+  <div class="controls">
+    <button id="updateBtn" class="btn btn-primary">Оновити</button>
+    <button id="autoUpdateBtn" class="btn btn-success">Автооновлення</button>
+    <span id="autoStatus">Вимкнено</span>
+  </div>
+
+  <div class="dashboard">
+    <div class="card">
+      <h3>Загальне споживання</h3>
+      <div>
+        <span id="param0" class="big-number">0</span>
+        <span class="unit">кВт</span>
+      </div>
+      <span id="dot0" class="status-dot"></span>
+    </div>
+    <div class="card">
+      <h3>Сонячна генерація</h3>
+      <div>
+        <span id="param1" class="big-number">0</span>
+        <span class="unit">кВт</span>
+      </div>
+      <span id="dot1" class="status-dot"></span>
+    </div>
+    <div class="card">
+      <h3>Стан батареї</h3>
+      <div>
+        <span id="param2" class="big-number">0</span>
+        <span class="unit">%</span>
+      </div>
+      <span id="dot2" class="status-dot"></span>
+    </div>
+    <div class="card">
+      <h3>Температура в будинку</h3>
+      <div>
+        <span id="param3" class="big-number">0</span>
+        <span class="unit">°C</span>
+      </div>
+      <span id="dot3" class="status-dot"></span>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <div class="chart-card">
+      <h3>Динаміка споживання та генерації</h3>
+      <div class="chart-container-inner">
+        <canvas id="energyChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="extra-row">
+    <div class="extra-card">
+      <h3>Баланс енергії</h3>
+      <div id="balanceVal" class="balance-value">0 кВт</div>
+      <div id="balanceLabel" class="sub-label">–</div>
+    </div>
+    <div class="extra-card">
+      <h3>Прогноз економії</h3>
+      <div id="savingsVal" class="savings-value">0 грн/день</div>
+      <div class="sub-label">На основі поточної генерації</div>
+    </div>
+    <div class="extra-card">
+      <h3>Стан кондиціонера</h3>
+      <div id="acStatus" class="ac-status ac-off">ВИМКНЕНО</div>
+      <div id="acReason" class="sub-label">–</div>
+    </div>
+  </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>

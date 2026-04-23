@@ -1,0 +1,157 @@
+:root {
+  --green:  #2ecc71;
+  --yellow: #f39c12;
+  --red:    #e74c3c;
+  --blue:   #3498db;
+  --dark:   #2c3e50;
+  --gray:   #7f8c8d;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  min-height: 100vh;
+  padding: 20px;
+  color: #eee;
+}
+
+.container { max-width: 1200px; margin: 0 auto; }
+
+header {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 28px 30px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+header h1 { font-size: 2rem; margin-bottom: 6px; }
+header p   { color: #aaa; font-size: 0.95rem; }
+
+.controls {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 16px 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.btn {
+  padding: 10px 22px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: transform .2s, opacity .2s;
+}
+.btn:hover       { transform: translateY(-2px); opacity: .9; }
+.btn-primary     { background: var(--blue);  color: #fff; }
+.btn-success     { background: var(--green); color: #fff; }
+.btn-danger      { background: var(--red);   color: #fff; }
+#autoStatus      { color: #aaa; font-size: 14px; margin-left: 6px; }
+
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+  margin-bottom: 20px;
+}
+.card {
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 26px;
+  border-radius: 16px;
+  text-align: center;
+  transition: transform .3s, box-shadow .3s;
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, .4);
+}
+.card h3     { font-size: 1rem; color: #bbb; margin-bottom: 14px; }
+.big-number  { font-size: 44px; font-weight: 700; color: #fff; }
+.unit        { font-size: 18px; color: var(--gray); margin-left: 4px; }
+
+.status-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-top: 12px;
+}
+.status-normal  { background: var(--green);  box-shadow: 0 0 8px var(--green); }
+.status-warning { background: var(--yellow); box-shadow: 0 0 8px var(--yellow); }
+.status-danger  {
+  background: var(--red);
+  box-shadow: 0 0 8px var(--red);
+  animation: pulse 1s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: .4; }
+}
+
+.extra-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+}
+.extra-card {
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 20px 26px;
+  border-radius: 16px;
+}
+.extra-card h3  { font-size: .95rem; color: #bbb; margin-bottom: 10px; }
+.sub-label      { font-size: 13px; color: #aaa; margin-top: 4px; }
+
+.balance-value    { font-size: 26px; font-weight: 700; }
+.balance-positive { color: var(--green); }
+.balance-negative { color: var(--red); }
+
+.savings-value { font-size: 26px; font-weight: 700; color: #f1c40f; }
+
+.ac-status { font-size: 22px; font-weight: 700; margin-top: 6px; }
+.ac-on     { color: var(--blue); }
+.ac-off    { color: var(--gray); }
+
+@media (max-width: 768px) {
+  .dashboard, .extra-row { grid-template-columns: 1fr; }
+  header h1    { font-size: 1.4rem; }
+  .big-number  { font-size: 34px; }
+  .controls    { flex-direction: column; }
+  .btn         { width: 100%; }
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+  .dashboard, .extra-row { grid-template-columns: repeat(2, 1fr); }
+}
+
+.chart-section {
+  margin-bottom: 20px;
+}
+.chart-card {
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 20px;
+  border-radius: 16px;
+  height: 320px; 
+}
+.chart-card h3 {
+  font-size: 1rem; color: #bbb; margin-bottom: 14px; text-align: center;
+}
+.chart-container-inner {
+  position: relative;
+  height: calc(100% - 30px);
+  width: 100%;
+}
