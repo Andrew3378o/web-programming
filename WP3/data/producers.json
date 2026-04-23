@@ -1,0 +1,28 @@
+[
+  {
+    "id": "1776944497926",
+    "ownerName": "Процик Андрій Володимирович",
+    "sourceType": "solar",
+    "address": "м. Київ, вул. Борщагівська 248",
+    "power": 30,
+    "tariff": 5,
+    "hoursPerYear": 1200,
+    "annualGeneration": 36000,
+    "annualIncome": 180000,
+    "connectionDate": "2007-01-06",
+    "registrationDate": "2026-04-23T11:41:37.926Z"
+  },
+  {
+    "id": "1776944928593",
+    "ownerName": "Пупкін Петро Петрович",
+    "sourceType": "wind",
+    "address": "м. Київ, майдан Незалежності",
+    "power": 69,
+    "tariff": 6.7,
+    "hoursPerYear": 6769,
+    "annualGeneration": 467061,
+    "annualIncome": 3129308.7,
+    "connectionDate": "2005-07-06",
+    "registrationDate": "2026-04-23T11:48:48.593Z"
+  }
+]

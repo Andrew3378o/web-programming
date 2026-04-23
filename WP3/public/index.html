@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Реєстр виробників за зеленим тарифом</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Реєстр виробників електроенергії за зеленим тарифом</h1>
+    <p>Варіант 14 — Відновлювані джерела енергії</p>
+  </header>
+
+  <main>
+    <section class="form-section">
+      <h2>Реєстрація нового виробника</h2>
+      <form id="producerForm">
+
+        <div class="form-group">
+          <label for="ownerName">Повне найменування власника *</label>
+          <input type="text" id="ownerName" name="ownerName" required
+                 placeholder="ПІБ або назва організації">
+        </div>
+
+        <div class="form-group">
+          <label for="sourceType">Тип ВДЕ *</label>
+          <select id="sourceType" name="sourceType" required>
+            <option value="">Оберіть тип джерела</option>
+            <option value="solar">Сонячна електростанція</option>
+            <option value="wind">Вітрова електростанція</option>
+            <option value="biogas">Біогазова установка</option>
+            <option value="hydro">Мала гідроелектростанція</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="address">Адреса об'єкта *</label>
+          <textarea id="address" name="address" required
+                    placeholder="Повна адреса розміщення установки"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="power">Встановлена потужність (кВт) *</label>
+            <input type="number" id="power" name="power" required
+                   min="0.1" step="0.1" placeholder="30">
+          </div>
+          <div class="form-group">
+            <label for="tariff">Зелений тариф (грн/кВт·год) *</label>
+            <input type="number" id="tariff" name="tariff" required
+                   min="0.01" step="0.01" placeholder="5.84">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="hoursPerYear">Розрахункова кількість годин виробітку на рік *</label>
+            <input type="number" id="hoursPerYear" name="hoursPerYear" required
+                   min="1" max="8760" step="1" placeholder="1200">
+          </div>
+          <div class="form-group">
+            <label for="connectionDate">Дата підключення до мережі *</label>
+            <input type="date" id="connectionDate" name="connectionDate" required>
+          </div>
+        </div>
+
+        <div class="calc-preview" id="calcPreview">
+          <p>Очікувана річна генерація: <strong id="previewGen">—</strong> кВт·год</p>
+          <p>Очікуваний річний дохід: <strong id="previewIncome">—</strong> грн</p>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Зареєструвати</button>
+          <button type="reset" class="btn btn-secondary">Очистити</button>
+        </div>
+      </form>
+      <div id="message" class="message"></div>
+    </section>
+
+    <section class="data-section">
+      <h2>Зареєстровані виробники</h2>
+      <div id="producersList" class="producers-list"></div>
+    </section>
+  </main>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
