@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>РЗА — Реєстр пристроїв релейного захисту</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="header-logo">
+        <div>
+          <h1>Система РЗА</h1>
+          <p>Релейний захист та автоматика</p>
+        </div>
+      </div>
+      <div class="header-stats" id="headerStats">
+        <div class="stat-chip armed">— збройованих</div>
+        <div class="stat-chip triggered">— спрацювань</div>
+        <div class="stat-chip blocked">— заблокованих</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel" id="formPanel">
+      <h2 class="panel-title"> Реєстрація пристрою РЗА</h2>
+      <div id="formMessage" class="form-message hidden"></div>
+      <div class="form-group">
+        <label for="name">Назва / позначення пристрою <span class="req">*</span></label>
+        <input type="text" id="name" placeholder="напр. РЗА-101 Лінія Л-1" required />
+      </div>
+
+      <div class="form-group">
+        <label for="protectionType">Тип захисту <span class="req">*</span></label>
+        <select id="protectionType">
+          <option value="">— оберіть тип —</option>
+          <option value="overcurrent">Струмовий захист (МСЗ)</option>
+          <option value="differential">Диференційний захист</option>
+          <option value="distance">Дистанційний захист</option>
+        </select>
+      </div>
+
+      <div id="settingsBlock" class="settings-block hidden">
+        <h3 class="settings-title">Уставки спрацювання</h3>
+
+        <div id="settings-overcurrent" class="settings-variant hidden">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Поріг струму (А)</label>
+              <input type="number" id="s_currentThreshold" min="10" max="5000" placeholder="450" />
+            </div>
+            <div class="form-group">
+              <label>Витримка часу (с)</label>
+              <input type="number" id="s_timeDelay" min="0" max="10" step="0.1" placeholder="0.5" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Номінальна напруга (кВ)</label>
+            <input type="number" id="s_voltage" min="0.4" max="750" placeholder="10" />
+          </div>
+        </div>
+
+        <div id="settings-differential" class="settings-variant hidden">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Диф. струм спрацювання (о.е.)</label>
+              <input type="number" id="s_differentialCurrent" min="0.1" max="1" step="0.01" placeholder="0.3" />
+            </div>
+            <div class="form-group">
+              <label>Струм відсічки (о.е.)</label>
+              <input type="number" id="s_breakingCurrent" min="2" max="20" step="0.5" placeholder="5" />
+            </div>
+          </div>
+        </div>
+
+        <div id="settings-distance" class="settings-variant hidden">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Зона 1, охоплення (%)</label>
+              <input type="number" id="s_zone1reach" min="50" max="90" placeholder="80" />
+            </div>
+            <div class="form-group">
+              <label>Зона 2, охоплення (%)</label>
+              <input type="number" id="s_zone2reach" min="100" max="150" placeholder="120" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Витримка зони 1 (с)</label>
+              <input type="number" id="s_zone1time" min="0" max="0.1" step="0.01" placeholder="0" />
+            </div>
+            <div class="form-group">
+              <label>Витримка зони 2 (с)</label>
+              <input type="number" id="s_zone2time" min="0.3" max="1" step="0.1" placeholder="0.4" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" id="submitBtn" onclick="submitDevice()">
+        Зареєструвати пристрій
+      </button>
+
+      <div class="filters-block">
+        <h3 class="settings-title">Фільтр та пошук</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Статус</label>
+            <select id="filterStatus" onchange="loadDevices()">
+              <option value="">Всі</option>
+              <option value="armed">Збройований</option>
+              <option value="triggered">Спрацював</option>
+              <option value="blocked">Заблокований</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Тип захисту</label>
+            <select id="filterType" onchange="loadDevices()">
+              <option value="">Всі</option>
+              <option value="overcurrent">Струмовий</option>
+              <option value="differential">Диференційний</option>
+              <option value="distance">Дистанційний</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <input type="text" id="filterSearch" placeholder="Пошук за назвою..." oninput="loadDevices()" />
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="listPanel">
+      <h2 class="panel-title">
+         Реєстр пристроїв
+        <span class="count-badge" id="countBadge">0</span>
+      </h2>
+
+      <div id="devicesContainer">
+        <p class="empty-msg">Завантаження...</p>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="eventsModal" class="modal hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modalTitle">Журнал подій</h3>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

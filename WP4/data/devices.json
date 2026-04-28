@@ -1,0 +1,192 @@
+[
+  {
+    "id": 1,
+    "name": "РЗА-101 Лінія Л-1",
+    "protectionType": "overcurrent",
+    "settings": {
+      "currentThreshold": 450,
+      "timeDelay": 0.5,
+      "voltage": 10
+    },
+    "status": "armed",
+    "lastOperation": "2025-03-15T08:22:00Z",
+    "faultType": "phase-to-ground",
+    "operationTime": 52,
+    "eventLog": [
+      {
+        "time": "2025-03-15T08:22:00Z",
+        "event": "Спрацювання МСЗ",
+        "result": "Відключення"
+      },
+      {
+        "time": "2025-01-10T14:05:00Z",
+        "event": "Самодіагностика",
+        "result": "Норма"
+      },
+      {
+        "time": "2026-04-27T19:23:37.594Z",
+        "event": "Тестування пристрою",
+        "result": "Відмова під час тесту",
+        "testTime": "15 мс"
+      },
+      {
+        "time": "2026-04-27T19:23:48.751Z",
+        "event": "Тестування пристрою",
+        "result": "Відмова під час тесту",
+        "testTime": "33 мс"
+      },
+      {
+        "time": "2026-04-27T19:24:12.381Z",
+        "event": "Оновлення параметрів",
+        "result": "Успішно"
+      },
+      {
+        "time": "2026-04-27T19:24:17.582Z",
+        "event": "Оновлення параметрів",
+        "result": "Успішно"
+      },
+      {
+        "time": "2026-04-27T19:24:23.374Z",
+        "event": "Тестування пристрою",
+        "result": "Тест пройдено успішно",
+        "testTime": "19 мс"
+      },
+      {
+        "time": "2026-04-27T19:25:40.089Z",
+        "event": "Тестування пристрою",
+        "result": "Тест пройдено успішно",
+        "testTime": "29 мс"
+      },
+      {
+        "time": "2026-04-28T10:48:13.268Z",
+        "event": "Тестування пристрою",
+        "result": "Тест пройдено успішно",
+        "testTime": "33 мс"
+      },
+      {
+        "time": "2026-04-28T10:48:16.694Z",
+        "event": "Тестування пристрою",
+        "result": "Відмова під час тесту",
+        "testTime": "37 мс"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "РЗА-202 Трансформатор Т-2",
+    "protectionType": "differential",
+    "settings": {
+      "differentialCurrent": 0.3,
+      "breakingCurrent": 5,
+      "harmonicRestraint": true
+    },
+    "status": "armed",
+    "lastOperation": "2024-11-20T03:11:00Z",
+    "faultType": "inter-turn",
+    "operationTime": 28,
+    "eventLog": [
+      {
+        "time": "2024-11-20T03:11:00Z",
+        "event": "Диференційний захист",
+        "result": "Відключення"
+      },
+      {
+        "time": "2026-04-27T19:23:45.320Z",
+        "event": "Тестування пристрою",
+        "result": "Тест пройдено успішно",
+        "testTime": "32 мс"
+      },
+      {
+        "time": "2026-04-27T19:24:26.414Z",
+        "event": "Тестування пристрою",
+        "result": "Відмова під час тесту",
+        "testTime": "39 мс"
+      },
+      {
+        "time": "2026-04-27T19:25:48.272Z",
+        "event": "Тестування пристрою",
+        "result": "Тест пройдено успішно",
+        "testTime": "17 мс"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "РЗА-303 Лінія 110 кВ",
+    "protectionType": "distance",
+    "settings": {
+      "zone1reach": 80,
+      "zone2reach": 120,
+      "zone3reach": 200,
+      "zone1time": 0,
+      "zone2time": 0.4
+    },
+    "status": "armed",
+    "lastOperation": null,
+    "faultType": null,
+    "operationTime": null,
+    "eventLog": [
+      {
+        "time": "2025-04-01T09:00:00Z",
+        "event": "Блокування",
+        "result": "Оперативне блокування"
+      },
+      {
+        "time": "2026-04-27T19:23:52.326Z",
+        "event": "Тестування пристрою",
+        "result": "Тест пройдено успішно",
+        "testTime": "24 мс"
+      },
+      {
+        "time": "2026-04-27T19:24:21.235Z",
+        "event": "Оновлення параметрів",
+        "result": "Успішно"
+      },
+      {
+        "time": "2026-04-27T19:24:32.073Z",
+        "event": "Тестування пристрою",
+        "result": "Тест пройдено успішно",
+        "testTime": "22 мс"
+      },
+      {
+        "time": "2026-04-27T19:25:44.643Z",
+        "event": "Тестування пристрою",
+        "result": "Тест пройдено успішно",
+        "testTime": "27 мс"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "РЗФ-102 Лінія Л-67",
+    "protectionType": "overcurrent",
+    "settings": {
+      "currentThreshold": 459,
+      "timeDelay": 0.67,
+      "voltage": 7
+    },
+    "status": "armed",
+    "lastOperation": null,
+    "faultType": null,
+    "operationTime": null,
+    "eventLog": [
+      {
+        "time": "2026-04-28T10:56:42.730Z",
+        "event": "Реєстрація в системі",
+        "result": "Успішно"
+      },
+      {
+        "time": "2026-04-28T10:56:50.613Z",
+        "event": "Тестування пристрою",
+        "result": "Тест пройдено успішно",
+        "testTime": "16 мс"
+      },
+      {
+        "time": "2026-04-28T10:57:00.419Z",
+        "event": "Тестування пристрою",
+        "result": "Відмова під час тесту",
+        "testTime": "13 мс"
+      }
+    ]
+  }
+]
