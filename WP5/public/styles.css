@@ -1,0 +1,50 @@
+:root {
+  --metric-font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial,
+    "Noto Sans", "Liberation Sans", sans-serif;
+}
+
+body {
+  font-family: var(--metric-font);
+}
+
+.metric-card {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.metric-value {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+#map {
+  height: 360px;
+  width: 100%;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+}
+
+.dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.dot-ok {
+  background: #198754;
+}
+
+.dot-faulty {
+  background: #dc3545;
+}
+
+.dot-offline {
+  background: #6c757d;
+}
+
