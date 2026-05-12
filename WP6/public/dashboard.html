@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Панель керування — Освітлення міста</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #0f172a; color: #e2e8f0; }
+    header {
+      background: #1e293b; padding: 14px 28px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid #334155;
+    }
+    .logo { font-size: 1.2rem; font-weight: 700; color: #fbbf24; }
+    .user-info { font-size: .85rem; color: #94a3b8; }
+    .user-info span { color: #e2e8f0; font-weight: 600; }
+    #logoutBtn {
+      padding: 7px 16px; background: #ef4444; color: #fff;
+      border: none; border-radius: 6px; cursor: pointer; font-size:.85rem;
+      margin-left: 14px;
+    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 24px 20px; }
+    h2 { font-size: 1.15rem; margin-bottom: 16px; color: #94a3b8; text-transform: uppercase; letter-spacing: .05em; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 28px; }
+    .card { background: #1e293b; border-radius: 12px; padding: 20px; border: 1px solid #334155; }
+    .card .val { font-size: 2rem; font-weight: 700; color: #fbbf24; }
+    .card .lbl { font-size: .8rem; color: #64748b; margin-top: 4px; }
+    .table-wrap { background: #1e293b; border-radius: 12px; overflow: hidden; border: 1px solid #334155; margin-bottom: 28px; }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: #334155; padding: 12px 16px; text-align: left; font-size: .78rem; text-transform: uppercase; color: #94a3b8; }
+    td { padding: 11px 16px; font-size: .9rem; border-top: 1px solid #1e293b; }
+    tr:hover td { background: rgba(255,255,255,.02); }
+    .badge {
+      display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: .75rem; font-weight: 600;
+    }
+    .badge-active  { background: rgba(52,211,153,.15); color: #34d399; }
+    .badge-partial { background: rgba(251,191,36,.15); color: #fbbf24; }
+    .badge-offline { background: rgba(239,68,68,.15);  color: #f87171; }
+    .panel { background: #1e293b; border-radius: 12px; padding: 24px; border: 1px solid #334155; margin-bottom: 28px; }
+    .panel h3 { margin-bottom: 18px; font-size: 1rem; }
+    .form-row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .form-row > div { flex: 1; min-width: 160px; }
+    label { font-size: .82rem; color: #94a3b8; display: block; margin-bottom: 5px; }
+    input, select, textarea {
+      width: 100%; padding: 9px 12px;
+      background: #0f172a; border: 1px solid #334155;
+      border-radius: 8px; color: #e2e8f0; font-size: .9rem; outline: none;
+    }
+    textarea { resize: vertical; min-height: 80px; }
+    .btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: .9rem; font-weight: 600; }
+    .btn-blue  { background: #3b82f6; color: #fff; }
+    .btn-green { background: #10b981; color: #fff; }
+    .toast { position: fixed; bottom: 24px; right: 24px; padding: 12px 20px;
+             border-radius: 8px; font-size: .9rem; z-index: 999; transition: opacity .3s; }
+    .toast-ok  { background: #065f46; color: #6ee7b7; border: 1px solid #34d399; }
+    .toast-err { background: #7f1d1d; color: #fca5a5; border: 1px solid #ef4444; }
+    .hidden { display: none; }
+    .budget-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+    .budget-item { background: #0f172a; border-radius: 8px; padding: 14px; border: 1px solid #334155; }
+    .budget-item .bval { font-size: 1.4rem; font-weight: 700; color: #a78bfa; }
+    .budget-item .blbl { font-size: .75rem; color: #64748b; margin-top: 3px; }
+  </style>
+</head>
+<body>
+  <header>
+    <span class="logo">💡 Освітлення Міста</span>
+    <div style="display:flex;align-items:center">
+      <span class="user-info">
+        <span id="userName">…</span> · <span id="userRole">…</span>
+      </span>
+      <button id="logoutBtn">Вийти</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <h2>Зведення системи</h2>
+    <div class="cards" id="summaryCards">
+      <div class="card"><div class="val" id="cTotal">—</div><div class="lbl">Усього зон</div></div>
+      <div class="card"><div class="val" id="cActive">—</div><div class="lbl">Активних зон</div></div>
+      <div class="card"><div class="val" id="cOffline">—</div><div class="lbl">Відключено</div></div>
+      <div class="card"><div class="val" id="cBrightness">—</div><div class="lbl">Середня яскравість</div></div>
+    </div>
+
+    <h2>Зони освітлення</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>№</th><th>Назва зони</th><th>Район</th>
+            <th>Ліхтарі</th><th>Яскравість</th><th>Статус</th>
+          </tr>
+        </thead>
+        <tbody id="zonesBody"><tr><td colspan="6" style="text-align:center;padding:20px;color:#64748b">Завантаження…</td></tr></tbody>
+      </table>
+    </div>
+
+    <div class="panel" id="dimmingPanel">
+      <h3>🔆 Управління яскравістю</h3>
+      <div class="form-row">
+        <div>
+          <label>Зона</label>
+          <select id="dimmZone"></select>
+        </div>
+        <div>
+          <label>Яскравість (%)</label>
+          <input type="number" id="dimmBrightness" min="0" max="100" value="75">
+        </div>
+        <div style="display:flex;align-items:flex-end">
+          <button class="btn btn-blue" id="dimmBtn">Встановити</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="maintenancePanel">
+      <h3>🔧 Подати звіт про несправність</h3>
+      <div class="form-row">
+        <div>
+          <label>Зона</label>
+          <select id="repZone"></select>
+        </div>
+        <div>
+          <label>Рівень серйозності</label>
+          <select id="repSeverity">
+            <option value="low">Низький</option>
+            <option value="medium" selected>Середній</option>
+            <option value="high">Критичний</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-top:10px">
+        <label>Опис несправності</label>
+        <textarea id="repDesc" placeholder="Опишіть несправність…"></textarea>
+      </div>
+      <button class="btn btn-green" id="repBtn" style="margin-top:12px">Надіслати звіт</button>
+    </div>
+
+    <div class="panel" id="budgetPanel">
+      <h3>💰 Прогноз бюджету</h3>
+      <div class="budget-grid" id="budgetGrid">
+        <div style="color:#64748b">Завантаження…</div>
+      </div>
+      <button class="btn btn-blue" id="budgetBtn" style="margin-top:16px">Оновити</button>
+    </div>
+
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script>
+  let currentUser = null;
+
+  async function init() {
+    const res = await fetch('/auth/status', { credentials: 'include' });
+    const data = await res.json();
+    if (!data.authenticated) { window.location.href = '/login.html'; return; }
+
+    currentUser = data.user;
+    document.getElementById('userName').textContent = data.user.name;
+    document.getElementById('userRole').textContent = roleLabel(data.user.role);
+
+    const role = data.user.role;
+    document.getElementById('dimmingPanel').style.display =
+      (role === 'dispatcher' || role === 'city_admin') ? '' : 'none';
+    document.getElementById('maintenancePanel').style.display =
+      (role === 'electrician') ? '' : 'none';
+    document.getElementById('budgetPanel').style.display =
+      (role === 'city_admin') ? '' : 'none';
+
+    await loadZones();
+    if (role === 'city_admin') await loadBudget();
+  }
+
+  function roleLabel(r) {
+    return { city_admin: 'Адміністратор міста', dispatcher: 'Диспетчер', electrician: 'Електрик' }[r] || r;
+  }
+
+  async function loadZones() {
+    const res = await fetch('/api/lighting/zones', { credentials: 'include' });
+    const data = await res.json();
+    
+    document.getElementById('cTotal').textContent      = data.summary.totalZones;
+    document.getElementById('cActive').textContent     = data.summary.activeZones;
+    document.getElementById('cOffline').textContent    = data.summary.offlineZones;
+    document.getElementById('cBrightness').textContent = data.summary.avgBrightness + '%';
+    
+    const tbody = document.getElementById('zonesBody');
+    tbody.innerHTML = data.zones.map(z => `
+      <tr>
+        <td>${z.id}</td>
+        <td>${z.name}</td>
+        <td>${z.district}</td>
+        <td>${z.activeLights} / ${z.lights}</td>
+        <td>${z.brightness}%</td>
+        <td><span class="badge badge-${z.status}">${statusLabel(z.status)}</span></td>
+      </tr>`).join('');
+  
+    const opts = data.zones.map(z => `<option value="${z.id}">${z.id}. ${z.name}</option>`).join('');
+    ['dimmZone','repZone'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = opts;
+    });
+  }
+
+  function statusLabel(s) {
+    return { active: '✅ Активна', partial: '⚠️ Часткова', offline: '❌ Відключена' }[s] || s;
+  }
+
+  document.getElementById('dimmBtn').addEventListener('click', async () => {
+    const res = await fetch('/api/lighting/dimming', {
+      method: 'POST', credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        zoneId:     parseInt(document.getElementById('dimmZone').value),
+        brightness: parseInt(document.getElementById('dimmBrightness').value),
+      }),
+    });
+    const data = await res.json();
+    if (res.ok) { toast(data.message, 'ok'); await loadZones(); }
+    else toast(data.error || 'Помилка', 'err');
+  });
+
+  document.getElementById('repBtn').addEventListener('click', async () => {
+    const res = await fetch('/api/maintenance/report', {
+      method: 'POST', credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        zoneId:      parseInt(document.getElementById('repZone').value),
+        description: document.getElementById('repDesc').value,
+        severity:    document.getElementById('repSeverity').value,
+      }),
+    });
+    const data = await res.json();
+    if (res.ok) { toast(data.message, 'ok'); document.getElementById('repDesc').value = ''; }
+    else toast(data.error || 'Помилка', 'err');
+  });
+
+  async function loadBudget() {
+    const res = await fetch('/api/budget/forecast', { credentials: 'include' });
+    const data = await res.json();
+    const f = data.forecast;
+    document.getElementById('budgetGrid').innerHTML = `
+      <div class="budget-item"><div class="bval">${f.energyKWhPerNight}</div><div class="blbl">кВт·год за ніч</div></div>
+      <div class="budget-item"><div class="bval">${f.costPerDayUAH.toLocaleString()}</div><div class="blbl">грн / доба</div></div>
+      <div class="budget-item"><div class="bval">${f.costPerMonthUAH.toLocaleString()}</div><div class="blbl">грн / місяць</div></div>
+      <div class="budget-item"><div class="bval">${f.costPerYearUAH.toLocaleString()}</div><div class="blbl">грн / рік</div></div>
+      <div class="budget-item"><div class="bval">${f.tariffUAHperKWh}</div><div class="blbl">грн / кВт·год</div></div>
+      <div class="budget-item"><div class="bval">${data.maintenanceReports}</div><div class="blbl">відкритих заявок</div></div>
+    `;
+  }
+  document.getElementById('budgetBtn').addEventListener('click', loadBudget);
+
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    await fetch('/auth/logout', { method: 'POST', credentials: 'include' });
+    window.location.href = '/login.html';
+  });
+
+  function toast(msg, type) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.className = `toast toast-${type}`;
+    el.classList.remove('hidden');
+    setTimeout(() => el.classList.add('hidden'), 3500);
+  }
+
+  init();
+  </script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Реєстрація — Система керування освітленням</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    }
+    .card {
+      background: rgba(255,255,255,0.05); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 16px;
+      padding: 40px; width: 380px; color: #fff;
+    }
+    .card h1 { font-size: 1.4rem; text-align: center; margin-bottom: 6px; }
+    .subtitle { text-align: center; font-size: 0.85rem; color: #a0aec0; margin-bottom: 26px; }
+    label { display: block; font-size: 0.85rem; margin-bottom: 5px; color: #cbd5e0; }
+    input, select {
+      width: 100%; padding: 10px 14px;
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px; color: #fff; font-size: 0.95rem;
+      margin-bottom: 16px; outline: none; transition: border-color .2s;
+    }
+    select option { background: #1a1a2e; }
+    input:focus, select:focus { border-color: #63b3ed; }
+    .strength { font-size: .78rem; margin-top: -12px; margin-bottom: 12px; }
+    button {
+      width: 100%; padding: 12px; background: #38a169; color: #fff;
+      border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; transition: background .2s;
+    }
+    button:hover { background: #2f855a; }
+    .error { background: rgba(229,62,62,.2); border: 1px solid #fc8181;
+             color: #fc8181; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size:.85rem; }
+    .success { background: rgba(56,161,105,.2); border: 1px solid #68d391;
+               color: #68d391; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size:.85rem; }
+    .link { text-align: center; margin-top: 16px; font-size: .85rem; color: #a0aec0; }
+    .link a { color: #63b3ed; text-decoration: none; }
+    .icon { font-size: 2.2rem; text-align: center; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">🔐</div>
+    <h1>Реєстрація</h1>
+    <p class="subtitle">Створіть акаунт для роботи з системою</p>
+
+    <div id="msg" style="display:none"></div>
+
+    <label>Повне ім'я</label>
+    <input type="text" id="name" placeholder="Іваненко Іван Іванович">
+
+    <label>Email</label>
+    <input type="email" id="email" placeholder="you@city.gov.ua">
+
+    <label>Пароль</label>
+    <input type="password" id="password" placeholder="Мін. 8 символів, велика літера, цифра, спецсимвол">
+    <div class="strength" id="strength"></div>
+
+    <label>Роль</label>
+    <select id="role">
+      <option value="">— Оберіть роль —</option>
+      <option value="electrician">Електрик</option>
+      <option value="dispatcher">Диспетчер</option>
+      <option value="city_admin">Адміністратор міста</option>
+    </select>
+
+    <button id="regBtn">Зареєструватись</button>
+    <p class="link">Вже є акаунт? <a href="/login.html">Увійти</a></p>
+  </div>
+
+  <script>
+    const passEl = document.getElementById('password');
+    const strEl  = document.getElementById('strength');
+    const msgEl  = document.getElementById('msg');
+    const btn    = document.getElementById('regBtn');
+
+    passEl.addEventListener('input', () => {
+      const p = passEl.value;
+      let score = 0;
+      if (p.length >= 8)        score++;
+      if (/[A-Z]/.test(p))      score++;
+      if (/[0-9]/.test(p))      score++;
+      if (/[^A-Za-z0-9]/.test(p)) score++;
+      const labels = ['', '🔴 Слабкий', '🟠 Задовільний', '🟡 Хороший', '🟢 Надійний'];
+      const colors = ['','#fc8181','#f6ad55','#f6e05e','#68d391'];
+      strEl.textContent = labels[score] || '';
+      strEl.style.color = colors[score] || '';
+    });
+
+    async function register() {
+      msgEl.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Реєстрація...';
+      try {
+        const res = await fetch('/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name:     document.getElementById('name').value,
+            email:    document.getElementById('email').value,
+            password: passEl.value,
+            role:     document.getElementById('role').value,
+          }),
+          credentials: 'include',
+        });
+        const data = await res.json();
+        if (res.ok) {
+          showMsg('✅ ' + data.message + '. Перенаправлення...', 'success');
+          setTimeout(() => window.location.href = '/login.html', 1800);
+        } else {
+          const text = data.errors ? data.errors.map(e => e.msg).join(', ') : data.error;
+          showMsg('❌ ' + text, 'error');
+        }
+      } catch (e) {
+        showMsg('❌ Помилка мережі.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Зареєструватись';
+      }
+    }
+
+    function showMsg(text, type) {
+      msgEl.className = type;
+      msgEl.textContent = text;
+      msgEl.style.display = 'block';
+    }
+
+    btn.addEventListener('click', register);
+  </script>
+</body>
+</html>
